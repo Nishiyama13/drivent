@@ -11,8 +11,4 @@ async function getBookingByUserId(userId: number) {
   return booking;
 }
 
-const bookingService = {
-  getBookingByUserId,
-};
-
-export default bookingService;
+export default { getBookingByUserId };

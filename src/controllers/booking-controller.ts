@@ -1,16 +1,19 @@
+import { NextFunction, Response } from 'express';
 import httpStatus from 'http-status';
-import { Response } from 'express';
-import bookingService from '@/services/booking-service';
 import { AuthenticatedRequest } from '@/middlewares';
+import bookingService from '@/services/booking-service';
 
-export async function getBookingByUser(req: AuthenticatedRequest, res: Response) {
-  const { userId } = req;
-
+export async function getBookingByUser(req: AuthenticatedRequest, res: Response, next: NextFunction) {
   try {
+    const { userId } = req;
     const booking = await bookingService.getBookingByUserId(userId);
 
-    return res.status(httpStatus.OK).send(booking);
+    return res.status(httpStatus.OK).send({
+      id: booking.id,
+      Room: booking.Room,
+    });
   } catch (error) {
-    return res.sendStatus(httpStatus.NOT_FOUND);
+    //return res.sendStatus(httpStatus.NOT_FOUND);
+    next(error);
   }
 }

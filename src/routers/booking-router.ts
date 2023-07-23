@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { authenticateToken } from '@/middlewares';
-import { getBookingByUser } from '@/controllers/booking-controller';
+import { getBookingByUser } from '@/controllers';
 
 const bookingRouter = Router();
 
