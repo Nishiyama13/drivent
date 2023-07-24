@@ -3,7 +3,7 @@ import {
   getBooking,
   getBookingByRoomIdReturn,
   getRoomByRoomIdReturn,
-  ticketByEnrollmentIdReturn
+  ticketByEnrollmentIdReturn,
 } from '../factories';
 import bookingService from '@/services/booking-service';
 import bookingRepository from '@/repositories/booking-repository';
@@ -77,6 +77,20 @@ describe('Booking Service Unit Tests', () => {
 
       const result = await bookingService.changeBookingRoom(userId, roomId);
       expect(result).toEqual(booking);
+    });
+  });
+
+  describe('Verify Enrollmnt', () => {
+    it('Shoud update a booking by userId and roomId', async () => {
+      const userId = 1;
+
+      jest.spyOn(enrollmentRepository, 'findWithAddressByUserId').mockResolvedValue(null);
+
+      const result = bookingService.verifyEnrollment(userId);
+      expect(result).rejects.toEqual({
+        name: 'CannotBookingError',
+        message: 'Cannot booking this room!',
+      });
     });
   });
 });
