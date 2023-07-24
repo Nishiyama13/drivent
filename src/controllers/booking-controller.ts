@@ -30,9 +30,6 @@ export async function createBookingRoom(req: AuthenticatedRequest, res: Response
       booking: booking.id,
     });
   } catch (error) {
-    if (error.name === 'CannotListHotelsError') {
-      return res.sendStatus(httpStatus.FORBIDDEN); //403
-    }
     next(error);
   }
 }

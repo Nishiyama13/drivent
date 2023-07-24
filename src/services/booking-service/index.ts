@@ -1,9 +1,8 @@
-import { cannotBookingError } from '../../errors/cannot-booking-error';
 import roomRepository from '@/repositories/room-repository/intex';
 import enrollmentRepository from '@/repositories/enrollment-repository';
 import ticketsRepository from '@/repositories/tickets-repository';
 import bookingRepository from '@/repositories/booking-repository';
-import { notFoundError } from '@/errors';
+import { notFoundError, cannotBookingError } from '@/errors';
 
 async function getBookingByUserId(userId: number) {
   const booking = await bookingRepository.findBookingByUserId(userId);
