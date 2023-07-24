@@ -16,18 +16,18 @@ async function getBookingByUserId(userId: number) {
 
 async function verifyEnrollment(userId: number) {
   const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
-  if (!enrollment) throw cannotBookingError(); //fazer um erro corretamente
+  if (!enrollment) throw cannotBookingError(); //403
 
   const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id);
 
   if (!ticket || ticket.status === 'RESERVED' || ticket.TicketType.isRemote || !ticket.TicketType.includesHotel) {
-    throw cannotBookingError(); //usar o erro que deve ser criado 403
+    throw cannotBookingError(); //403
   }
 }
 
 async function verifyValidBooking(roomId: number) {
   const room = await roomRepository.findRoomByRoomId(roomId);
-  const bookings = await bookingRepository.findByRoomId(roomId); //fazer um find by room id;
+  const bookings = await bookingRepository.findByRoomId(roomId);
 
   if (!room) throw notFoundError(); //404
   if (room.capacity <= bookings.length) throw cannotBookingError(); //403
@@ -36,10 +36,10 @@ async function verifyValidBooking(roomId: number) {
 }
 
 async function postBookingRoom(userId: number, roomId: number) {
-  if (!roomId) throw badRequestError(); //testa se veio o roomId //conf error
+  if (!roomId) throw badRequestError();
 
-  await verifyEnrollment(userId); //checar se o enrollment é válido
-  await verifyValidBooking(roomId); //checar se o booking é válido
+  await verifyEnrollment(userId);
+  await verifyValidBooking(roomId);
 
   return bookingRepository.createBookingRoom({
     roomId,
@@ -48,9 +48,9 @@ async function postBookingRoom(userId: number, roomId: number) {
 }
 
 async function changeBookingRoom(userId: number, roomId: number) {
-  if (!roomId) throw badRequestError(); //testa se veio o roomId //conf error
+  if (!roomId) throw badRequestError();
 
-  await verifyValidBooking(roomId); //checar se o booking é válido
+  await verifyValidBooking(roomId);
 
   const booking = await bookingRepository.findBookingByUserId(userId);
 

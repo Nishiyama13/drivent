@@ -35,7 +35,7 @@ export async function createBookingRoom(req: AuthenticatedRequest, res: Response
 
 export async function upsertBooking(req: AuthenticatedRequest, res: Response, next: NextFunction) {
   const { userId } = req;
-  const bookingId = parseInt(req.params.id);
+  const bookingId = Number(req.params.bookingId);
   if (!bookingId) return res.sendStatus(httpStatus.BAD_REQUEST);
 
   try {
