@@ -1,4 +1,4 @@
-import roomRepository from '@/repositories/room-repository/intex';
+import roomRepository from '@/repositories/room-repository/index';
 import enrollmentRepository from '@/repositories/enrollment-repository';
 import ticketsRepository from '@/repositories/tickets-repository';
 import bookingRepository from '@/repositories/booking-repository';
@@ -65,4 +65,4 @@ async function changeBookingRoom(userId: number, roomId: number) {
   });
 }
 
-export default { getBookingByUserId, postBookingRoom, changeBookingRoom };
+export default { getBookingByUserId, postBookingRoom, changeBookingRoom, verifyEnrollment, verifyValidBooking };
