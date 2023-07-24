@@ -14,7 +14,6 @@ export async function getBookingByUser(req: AuthenticatedRequest, res: Response,
       Room: booking.Room,
     });
   } catch (error) {
-    //return res.sendStatus(httpStatus.NOT_FOUND);
     next(error);
   }
 }
@@ -27,7 +26,24 @@ export async function createBookingRoom(req: AuthenticatedRequest, res: Response
     const booking = await bookingService.postBookingRoom(userId, roomId);
 
     return res.status(httpStatus.OK).send({
-      booking: booking.id,
+      bookingId: booking.id,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function upsertBooking(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+  const { userId } = req;
+  const bookingId = parseInt(req.params.id);
+  if (!bookingId) return res.sendStatus(httpStatus.BAD_REQUEST);
+
+  try {
+    const { roomId } = req.body as BookingRequest;
+    const booking = await bookingService.changeBookingRoom(userId, roomId);
+
+    return res.status(httpStatus.OK).send({
+      bookingId: booking.id,
     });
   } catch (error) {
     next(error);

@@ -1,5 +1,5 @@
 import { Booking } from '@prisma/client';
-import { CreateBookingParams } from '@/protocols';
+import { CreateBookingParams, UpsertBookingParams } from '@/protocols';
 import { prisma } from '@/config';
 
 async function findBookingByUserId(userId: number) {
@@ -29,10 +29,26 @@ async function createBookingRoom({ roomId, userId }: CreateBookingParams): Promi
   });
 }
 
+async function upsertBookingRoom({ id, roomId, userId }: UpsertBookingParams): Promise<Booking> {
+  return prisma.booking.upsert({
+    where: {
+      id,
+    },
+    create: {
+      roomId,
+      userId,
+    },
+    update: {
+      roomId,
+    },
+  });
+}
+
 const bookingRepository = {
   findBookingByUserId,
   findByRoomId,
   createBookingRoom,
+  upsertBookingRoom,
 };
 
 export default bookingRepository;

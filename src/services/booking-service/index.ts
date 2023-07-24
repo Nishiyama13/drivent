@@ -2,7 +2,7 @@ import roomRepository from '@/repositories/room-repository/intex';
 import enrollmentRepository from '@/repositories/enrollment-repository';
 import ticketsRepository from '@/repositories/tickets-repository';
 import bookingRepository from '@/repositories/booking-repository';
-import { notFoundError, cannotBookingError } from '@/errors';
+import { notFoundError, cannotBookingError, badRequestError } from '@/errors';
 
 async function getBookingByUserId(userId: number) {
   const booking = await bookingRepository.findBookingByUserId(userId);
@@ -36,7 +36,7 @@ async function verifyValidBooking(roomId: number) {
 }
 
 async function postBookingRoom(userId: number, roomId: number) {
-  if (!roomId) throw notFoundError(); //testa se veio o roomId
+  if (!roomId) throw badRequestError(); //testa se veio o roomId //conf error
 
   await verifyEnrollment(userId); //checar se o enrollment é válido
   await verifyValidBooking(roomId); //checar se o booking é válido
@@ -47,4 +47,22 @@ async function postBookingRoom(userId: number, roomId: number) {
   });
 }
 
-export default { getBookingByUserId, postBookingRoom };
+async function changeBookingRoom(userId: number, roomId: number) {
+  if (!roomId) throw badRequestError(); //testa se veio o roomId //conf error
+
+  await verifyValidBooking(roomId); //checar se o booking é válido
+
+  const booking = await bookingRepository.findBookingByUserId(userId);
+
+  if (!booking || booking.userId !== userId) {
+    throw cannotBookingError();
+  }
+
+  return bookingRepository.upsertBookingRoom({
+    id: booking.id,
+    roomId,
+    userId,
+  });
+}
+
+export default { getBookingByUserId, postBookingRoom, changeBookingRoom };
