@@ -61,16 +61,16 @@ export async function buildValidBody(roomId: number) {
 }
 
 export async function enrollmentWithAddressReturn() {
-  const enrollment: Enrollment & { Adress: Address[] } = {
+  const enrollment: Enrollment & { Address: Address[] } = {
     id: 1,
-    name: 'Ali',
+    name: 'Ali Baba',
     cpf: '44455566699',
     birthday: new Date(),
     phone: '998899889',
     userId: 1,
     createdAt: new Date(),
     updatedAt: new Date(),
-    Adress: [
+    Address: [
       {
         id: 1,
         cep: '09310040',
