@@ -1,5 +1,6 @@
 import { NextFunction, Response } from 'express';
 import httpStatus from 'http-status';
+import { BookingRequest } from '../protocols';
 import { AuthenticatedRequest } from '@/middlewares';
 import bookingService from '@/services/booking-service';
 
@@ -14,6 +15,24 @@ export async function getBookingByUser(req: AuthenticatedRequest, res: Response,
     });
   } catch (error) {
     //return res.sendStatus(httpStatus.NOT_FOUND);
+    next(error);
+  }
+}
+
+export async function createBookingRoom(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+  try {
+    const { userId } = req;
+    const { roomId } = req.body as BookingRequest;
+
+    const booking = await bookingService.postBookingRoom(userId, roomId);
+
+    return res.status(httpStatus.OK).send({
+      booking: booking.id,
+    });
+  } catch (error) {
+    if (error.name === 'CannotListHotelsError') {
+      return res.sendStatus(httpStatus.FORBIDDEN); //403
+    }
     next(error);
   }
 }
