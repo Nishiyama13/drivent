@@ -30,3 +30,11 @@ export async function getBooking() {
   };
   return booking;
 }
+
+type CreateValidBody = Pick<Booking, 'roomId'>;
+export async function buildValidBody(roomId: number) {
+  const buildValidBody: CreateValidBody = {
+    roomId: roomId,
+  };
+  return buildValidBody;
+}
