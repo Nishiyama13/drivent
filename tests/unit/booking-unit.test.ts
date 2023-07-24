@@ -1,6 +1,9 @@
-import { getBooking } from '../factories';
+import { getBooking, getBookingByRoomIdReturn, getRoomByRoomIdReturn } from '../factories';
 import bookingService from '@/services/booking-service';
 import bookingRepository from '@/repositories/booking-repository';
+//import enrollmentRepository from '@/repositories/enrollment-repository';
+//import ticketsRepository from '@/repositories/tickets-repository';
+import roomRepository from '@/repositories/room-repository';
 
 describe('Booking Service Unit Tests', () => {
   beforeEach(() => {
@@ -34,22 +37,20 @@ describe('Booking Service Unit Tests', () => {
     });
   });
 
-  /*describe('postBookingRoom', () => {
-    it('Shoud create a booking by userId and roomId', async () => {
+  describe('Change Booking Room', () => {
+    it('Shoud update a booking by userId and roomId', async () => {
       const userId = 1;
       const roomId = 1;
       const booking = await getBooking();
 
-      jest.spyOn(bookingService, 'verifyEnrollment').mockResolvedValue(undefined);
-      jest.spyOn(enrollmentRepository, 'findById').mockResolvedValue(enrollmentWithAddressReturn());
-      jest.spyOn(ticketsRepository, 'findTicketByEnrollmentId').mockResolvedValue(ticketByEnrollmentIdReturn());
-
       jest.spyOn(bookingService, 'verifyValidBooking').mockResolvedValue(undefined);
       jest.spyOn(roomRepository, 'findRoomByRoomId').mockResolvedValue(getRoomByRoomIdReturn());
       jest.spyOn(bookingRepository, 'findByRoomId').mockResolvedValue(getBookingByRoomIdReturn());
-      jest.spyOn(bookingRepository, 'createBookingRoom').mockResolvedValue(booking);
-      const result = await bookingService.postBookingRoom(userId, roomId);
+      jest.spyOn(bookingRepository, 'findBookingByUserId').mockResolvedValue(booking);
+      jest.spyOn(bookingRepository, 'upsertBookingRoom').mockResolvedValue(booking);
+
+      const result = await bookingService.changeBookingRoom(userId, roomId);
       expect(result).toEqual(booking);
     });
-  });*/
+  });
 });
